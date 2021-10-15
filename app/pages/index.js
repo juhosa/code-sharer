@@ -14,7 +14,7 @@ export default function Home() {
       <main className={styles.main}>
         <h1 className={styles.title}>CodeSharer</h1>
         <div>
-          <h3>Pages</h3>
+          <h3>Pages!</h3>
           <ul>
             <li>
               <Link href="/session/create">Create session</Link>
