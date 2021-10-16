@@ -3,7 +3,14 @@ const CodeBlock = ({ data }) => {
     <div>
       <span>Creator: {data.creator}</span>
       <br />
-      <textarea value={data.data} name="" id="" cols="30" rows="10"></textarea>
+      <textarea
+        value={data.data}
+        name=""
+        id=""
+        cols="30"
+        rows="10"
+        readOnly
+      ></textarea>
     </div>
   );
 };

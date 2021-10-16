@@ -1,8 +1,25 @@
 import { useState } from "react";
+import { createClient } from "@supabase/supabase-js";
+
 const AddCode = () => {
   const [username, setUsername] = useState("");
   const [sessionhash, setSessionhash] = useState("");
   const [codedata, setCodedata] = useState("");
+
+  const save = async () => {
+    if (username === "" || sessionhash === "" || codedata === "") {
+      return;
+    }
+
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_DB_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_API_KEY;
+
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+    const { data, error } = await supabase
+      .from("codes")
+      .insert({ creator: username, session_hash: sessionhash, data: codedata });
+  };
 
   return (
     <div>
@@ -37,7 +54,7 @@ const AddCode = () => {
         ></textarea>
 
         <br />
-        <button>Save</button>
+        <button onClick={save}>Save</button>
       </div>
     </div>
   );

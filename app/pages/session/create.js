@@ -1,12 +1,32 @@
 import { useState } from "react";
+import { createClient } from "@supabase/supabase-js";
+
 const CreateSession = () => {
   const [username, setUsername] = useState("");
   const [sessionName, setSessionName] = useState("");
   const [hash, setHash] = useState("");
 
-  const save = () => {
+  const save = async () => {
     console.log(username, sessionName, hash);
+
+    if (username === "" || hash === "") {
+      return;
+    }
+
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_DB_URL;
+    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_API_KEY;
+
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+    const { data, error } = await supabase
+      .from("sessions")
+      .insert({ creator: username, hash: hash });
+
+    console.log({ data });
+    console.error(error);
   };
+
+  console.log(process.env.NEXT_PUBLIC_SUPABASE_DB_URL);
 
   return (
     <div>
