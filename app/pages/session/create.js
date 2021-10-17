@@ -5,11 +5,13 @@ const CreateSession = () => {
   const [username, setUsername] = useState("");
   const [sessionName, setSessionName] = useState("");
   const [hash, setHash] = useState("");
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
 
   const save = async () => {
     console.log(username, sessionName, hash);
 
-    if (username === "" || hash === "") {
+    if (username === "" || hash === "" || startTime === "" || endTime === "") {
       return;
     }
 
@@ -18,15 +20,16 @@ const CreateSession = () => {
 
     const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-    const { data, error } = await supabase
-      .from("sessions")
-      .insert({ creator: username, hash: hash });
+    const { data, error } = await supabase.from("sessions").insert({
+      creator: username,
+      hash: hash,
+      start_time: startTime,
+      end_time: endTime,
+    });
 
     console.log({ data });
     console.error(error);
   };
-
-  console.log(process.env.NEXT_PUBLIC_SUPABASE_DB_URL);
 
   return (
     <div>
@@ -54,6 +57,26 @@ const CreateSession = () => {
           type="text"
           value={hash}
           onChange={(e) => setHash(e.target.value)}
+        />
+        <br />
+
+        <label htmlFor="starttime">Start time</label>
+        <input
+          type="datetime-local"
+          value={startTime}
+          onChange={(e) => setStartTime(e.target.value)}
+          name="starttime"
+          id="starttime"
+        />
+        <br />
+
+        <label htmlFor="endtime">End time</label>
+        <input
+          type="datetime-local"
+          value={endTime}
+          onChange={(e) => setEndTime(e.target.value)}
+          name="endtime"
+          id="endtime"
         />
         <br />
 
