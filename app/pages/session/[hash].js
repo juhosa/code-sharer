@@ -1,14 +1,9 @@
 import CodeBlock from "../../components/CodeBlock";
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "../../utils/supabaseClient";
 
 export async function getServerSideProps(context) {
   const { params } = context;
   const { hash } = params;
-
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_DB_URL;
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_API_KEY;
-
-  const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
   const { data, error } = await supabase
     .from("codes")

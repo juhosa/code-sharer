@@ -7,7 +7,7 @@ Share code during lectures.
 - [x] Ability to create a new session
 - [x] Ability to save code for a certain session
 - [x] Abililty to view codes for certain session
-- [ ] Extract the supabaseClient into util
+- [x] Extract the supabaseClient into util
 - [ ] Figure out an auth scheme
 - [ ] Make it pretty
 - [ ] Meaningful messages on save success/failure
