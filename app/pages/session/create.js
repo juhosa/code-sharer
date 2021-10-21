@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "../../utils/supabaseClient";
 
 const CreateSession = () => {
   const [username, setUsername] = useState("");
@@ -9,16 +9,9 @@ const CreateSession = () => {
   const [endTime, setEndTime] = useState("");
 
   const save = async () => {
-    console.log(username, sessionName, hash);
-
     if (username === "" || hash === "" || startTime === "" || endTime === "") {
       return;
     }
-
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_DB_URL;
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_API_KEY;
-
-    const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
     const { data, error } = await supabase.from("sessions").insert({
       creator: username,
@@ -26,9 +19,6 @@ const CreateSession = () => {
       start_time: startTime,
       end_time: endTime,
     });
-
-    console.log({ data });
-    console.error(error);
   };
 
   return (

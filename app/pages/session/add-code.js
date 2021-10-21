@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createClient } from "@supabase/supabase-js";
+import { supabase } from "../../utils/supabaseClient";
 
 const AddCode = () => {
   const [username, setUsername] = useState("");
@@ -11,14 +11,11 @@ const AddCode = () => {
       return;
     }
 
-    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_DB_URL;
-    const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_API_KEY;
-
-    const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
     const { data, error } = await supabase
       .from("codes")
       .insert({ creator: username, session_hash: sessionhash, data: codedata });
+
+    console.error(error);
   };
 
   return (
