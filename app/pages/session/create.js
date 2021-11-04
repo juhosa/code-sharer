@@ -1,12 +1,30 @@
 import { useState } from "react";
 import { supabase } from "../../utils/supabaseClient";
+import Link from "next/link";
 
-const CreateSession = () => {
-  const [username, setUsername] = useState("");
+export async function getServerSideProps({ req }) {
+  const { user } = await supabase.auth.api.getUserByCookie(req);
+
+  if (!user) {
+    return {
+      props: {},
+      redirect: {
+        destination: "/login",
+      },
+    };
+  }
+
+  return { props: { user } };
+}
+
+const CreateSession = ({ user }) => {
+  // console.log({ user });
+  const [username, setUsername] = useState(user.email);
   const [sessionName, setSessionName] = useState("");
   const [hash, setHash] = useState("");
   const [startTime, setStartTime] = useState("");
   const [endTime, setEndTime] = useState("");
+  const [msg, setMsg] = useState("");
 
   const save = async () => {
     if (username === "" || hash === "" || startTime === "" || endTime === "") {
@@ -15,10 +33,15 @@ const CreateSession = () => {
 
     const { data, error } = await supabase.from("sessions").insert({
       creator: username,
+      name: sessionName,
       hash: hash,
       start_time: startTime,
       end_time: endTime,
     });
+
+    if (data) {
+      setMsg("Created!");
+    }
   };
 
   return (
@@ -31,6 +54,7 @@ const CreateSession = () => {
           type="text"
           value={username}
           onChange={(e) => setUsername(e.target.value)}
+          disabled
         />
         <br />
 
@@ -72,7 +96,15 @@ const CreateSession = () => {
 
         <button onClick={save}>Create</button>
 
-        <p>INFO</p>
+        {msg && (
+          <div>
+            <p>{msg}</p>
+            <p>
+              The link for the session is{" "}
+              <Link href={`/session/${hash}`}>{`/session/${hash}`}</Link>{" "}
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
